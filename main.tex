@@ -1,0 +1,304 @@
+\documentclass[10pt, letterpaper]{article}
+
+% Packages:
+\usepackage[
+    ignoreheadfoot, % set margins without considering header and footer
+    top=2 cm, % seperation between body and page edge from the top
+    bottom=2 cm, % seperation between body and page edge from the bottom
+    left=2 cm, % seperation between body and page edge from the left
+    right=2 cm, % seperation between body and page edge from the right
+    footskip=1.0 cm, % seperation between body and footer
+    % showframe % for debugging 
+]{geometry} % for adjusting page geometry
+\usepackage{titlesec} % for customizing section titles
+\usepackage{tabularx} % for making tables with fixed width columns
+\usepackage{array} % tabularx requires this
+\usepackage[dvipsnames]{xcolor} % for coloring text
+\definecolor{primaryColor}{RGB}{0, 0, 0} % define primary color
+\usepackage{enumitem} % for customizing lists
+\usepackage{fontawesome5} % for using icons
+\usepackage{amsmath} % for math
+\usepackage[
+    pdftitle={John Doe's CV},
+    pdfauthor={John Doe},
+    pdfcreator={LaTeX with RenderCV},
+    colorlinks=true,
+    urlcolor=primaryColor
+]{hyperref} % for links, metadata and bookmarks
+\usepackage[pscoord]{eso-pic} % for floating text on the page
+\usepackage{calc} % for calculating lengths
+\usepackage{bookmark} % for bookmarks
+\usepackage{lastpage} % for getting the total number of pages
+\usepackage{changepage} % for one column entries (adjustwidth environment)
+\usepackage{paracol} % for two and three column entries
+\usepackage{ifthen} % for conditional statements
+\usepackage{needspace} % for avoiding page brake right after the section title
+\usepackage{iftex} % check if engine is pdflatex, xetex or luatex
+
+% Ensure that generate pdf is machine readable/ATS parsable:
+\ifPDFTeX
+    \input{glyphtounicode}
+    \pdfgentounicode=1
+    \usepackage[T1]{fontenc}
+    \usepackage[utf8]{inputenc}
+    \usepackage{lmodern}
+\fi
+
+\usepackage{charter}
+
+% Some settings:
+\raggedright
+\AtBeginEnvironment{adjustwidth}{\partopsep0pt} % remove space before adjustwidth environment
+\pagestyle{empty} % no header or footer
+\setcounter{secnumdepth}{0} % no section numbering
+\setlength{\parindent}{0pt} % no indentation
+\setlength{\topskip}{0pt} % no top skip
+\setlength{\columnsep}{0.15cm} % set column seperation
+\pagenumbering{gobble} % no page numbering
+
+\titleformat{\section}{\needspace{4\baselineskip}\bfseries\large}{}{0pt}{}[\vspace{1pt}\titlerule]
+
+\titlespacing{\section}{
+    % left space:
+    -1pt
+}{
+    % top space:
+    0.3 cm
+}{
+    % bottom space:
+    0.2 cm
+} % section title spacing
+
+\renewcommand\labelitemi{$\vcenter{\hbox{\small$\bullet$}}$} % custom bullet points
+\newenvironment{highlights}{
+    \begin{itemize}[
+        topsep=0.10 cm,
+        parsep=0.10 cm,
+        partopsep=0pt,
+        itemsep=0pt,
+        leftmargin=0 cm + 10pt
+    ]
+}{
+    \end{itemize}
+} % new environment for highlights
+
+
+\newenvironment{highlightsforbulletentries}{
+    \begin{itemize}[
+        topsep=0.10 cm,
+        parsep=0.10 cm,
+        partopsep=0pt,
+        itemsep=0pt,
+        leftmargin=10pt
+    ]
+}{
+    \end{itemize}
+} % new environment for highlights for bullet entries
+
+\newenvironment{onecolentry}{
+    \begin{adjustwidth}{
+        0 cm + 0.00001 cm
+    }{
+        0 cm + 0.00001 cm
+    }
+}{
+    \end{adjustwidth}
+} % new environment for one column entries
+
+\newenvironment{twocolentry}[2][]{
+    \onecolentry
+    \def\secondColumn{#2}
+    \setcolumnwidth{\fill, 4.5 cm}
+    \begin{paracol}{2}
+}{
+    \switchcolumn \raggedleft \secondColumn
+    \end{paracol}
+    \endonecolentry
+} % new environment for two column entries
+
+\newenvironment{threecolentry}[3][]{
+    \onecolentry
+    \def\thirdColumn{#3}
+    \setcolumnwidth{, \fill, 4.5 cm}
+    \begin{paracol}{3}
+    {\raggedright #2} \switchcolumn
+}{
+    \switchcolumn \raggedleft \thirdColumn
+    \end{paracol}
+    \endonecolentry
+} % new environment for three column entries
+
+\newenvironment{header}{
+    \setlength{\topsep}{0pt}\par\kern\topsep\centering\linespread{1.5}
+}{
+    \par\kern\topsep
+} % new environment for the header
+
+\newcommand{\placelastupdatedtext}{% \placetextbox{<horizontal pos>}{<vertical pos>}{<stuff>}
+  \AddToShipoutPictureFG*{% Add <stuff> to current page foreground
+    \put(
+        \LenToUnit{\paperwidth-2 cm-0 cm+0.05cm},
+        \LenToUnit{\paperheight-1.0 cm}
+    ){\vtop{{\null}\makebox[0pt][c]{
+        \small\color{gray}\textit{Last updated in September 2024}\hspace{\widthof{Last updated in September 2024}}
+    }}}%
+  }%
+}%
+
+% save the original href command in a new command:
+\let\hrefWithoutArrow\href
+
+% new command for external links:
+
+
+\begin{document}
+    \newcommand{\AND}{\unskip
+        \cleaders\copy\ANDbox\hskip\wd\ANDbox
+        \ignorespaces
+    }
+    \newsavebox\ANDbox
+    \sbox\ANDbox{$|$}
+
+    \begin{header}
+        \fontsize{25 pt}{25 pt}\selectfont Sam Laister
+
+        \vspace{5 pt}
+
+        \normalsize
+        \mbox{Sheffield, UK}%
+        \kern 5.0 pt%
+        \AND%
+        \kern 5.0 pt%
+        \mbox{\hrefWithoutArrow{mailto:laister.sam@gmail.com}{laister.sam@gmail.com}}%
+        \kern 5.0 pt%
+        \AND%
+        \kern 5.0 pt%
+        \mbox{\hrefWithoutArrow{tel:+448742104354}{07842104354}}%
+        \kern 5.0 pt%
+        \AND%
+        \kern 5.0 pt%
+        \mbox{\hrefWithoutArrow{https://everbit.dev/}{everbit.dev}}%
+        \kern 5.0 pt%
+        \AND%
+        \kern 5.0 pt%
+        \mbox{\hrefWithoutArrow{https://www.linkedin.com/in/sam-laister/}{https://www.linkedin.com/in/sam-laister/}}%
+        \kern 5.0 pt%
+        \AND%
+        \kern 5.0 pt%
+        \mbox{\hrefWithoutArrow{https://github.com/yourusername}{github.com/soup666}}%
+    \end{header}
+
+    \vspace{5 pt - 0.3 cm}
+
+
+    \section{Everbit Software}
+        
+        \begin{onecolentry}
+            Co-founded in June 2023, I managed an app development team for my company Everbit Software, comprised of dedicated development team. We successfully launched multiple Flutter and React Native projects with clients during this time. As a company, we also collaborated on a national Internet of Things Wirepas lighting system and multiple web applications for independent businesses using SvelteKit and PHP.
+        \end{onecolentry}
+
+    \section{Education}
+
+        \begin{twocolentry}{
+            Sept 2022 – May 2025
+        }
+            \textbf{Sheffield University}, BSc in Computer Science\end{twocolentry}
+
+        \vspace{0.10 cm}
+        \begin{onecolentry}
+            \begin{highlights}
+                \item \textbf{Expected Grade:} 2:1.
+                \item \textbf{Studied Tech:} Typescript, Python, C++, Go, Rust, Ruby on Rails, Software Architecture, Systems Design.
+                \item \textbf{Dissertation Project:} Utilizing AI with Photogrammetry into a fullstack mobile application.
+            \end{highlights}
+        \end{onecolentry}
+    
+    \section{Experience}
+
+        \begin{twocolentry}{
+            Jan 2024 - Present
+        }
+            \textbf{Chief Technical Advisor}, Wellmatch Ltd -- London, UK\end{twocolentry}
+
+        \vspace{0.10 cm}
+        \begin{onecolentry}
+            \begin{highlights}
+                \item Product Manager for Wellmatch App, Wellcorp Provider App, and Wellcorp Employee App
+                \item Experience with Flutter and a company pivot to React Native
+                \item B2C and B2B experience
+            \end{highlights}
+        \end{onecolentry}
+
+        \begin{twocolentry}{
+            June 2023 - Present
+        }
+            \textbf{Co Founder}, Everbit Software -- Lincoln, UK\end{twocolentry}
+
+        \vspace{0.10 cm}
+        \begin{onecolentry}
+            \begin{highlights}
+                \item Developed Bespoke Solutions with Clients.
+                \item Launched multiple App's, Including \href{https://www.linkedin.com/company/mealsapp/}{Meal's Recipe Planner} on the app store as well as a national Wirepas Lighting System to connect Emergency Lights with BLE Lighting. Used in Ikea nationally.
+                \item In depth knowledge of XCode and Apple's Provisioning Profile system. Experience with Apple Connect and Fastlane.
+                \item Experience managing a company and a small development team.
+                \item Server hosting for multiple clients.
+            \end{highlights}
+        \end{onecolentry}
+        
+        \begin{twocolentry}{
+            Feb 2022 - June 2023
+        }
+            \textbf{Software Engineer}, Lyke Ltd -- Grimsby, UK\end{twocolentry}
+
+        \vspace{0.10 cm}
+        \begin{onecolentry}
+            \begin{highlights}
+                \item Developed PHP Symfony applications for clients, including B2B Dashboards, Analytics tools.
+            \end{highlights}
+        \end{onecolentry}
+
+    
+    \section{Projects}
+
+        \begin{twocolentry}{}
+            \textbf{Ble Lighting}\end{twocolentry}
+
+        \vspace{0.10 cm}
+        \begin{onecolentry}
+            \begin{highlights}
+                \item The interface consisted of a dynamic Admin Portal interface to register BLE light's to and control remotely using schedules and reporting features.
+                \item Stack: Python, PHP, SvelteKit, Wirepas
+                \item Installed in multiple Ikea's across the UK. 
+            \end{highlights}
+        \end{onecolentry}
+
+        \vspace{0.2 cm}
+
+        \begin{twocolentry}{}
+            \textbf{Mobile Model Maker}\end{twocolentry}
+
+        \vspace{0.10 cm}
+        \begin{onecolentry}
+            \begin{highlights}
+                \item Utlizies Gemini's AI Api to feature detect physical scans of objects and uses OpenMVG + OpenMVS to create digital fully textures models with names and descriptions. 
+                \item Stack: Go, Flutter, PostgreSQL
+                \item Tools Used: Goose Database Migration Manager, GORM for Go an ORM library in Go.
+            \end{highlights}
+        \end{onecolentry}
+
+        \vspace{0.2 cm}
+
+    
+    \section{Technologies}
+        
+        \begin{onecolentry}
+            \textbf{Languages:} Go, PostgreSQL, React Native, Flutter, Svelte, PHP (Symfony), Java, Python, Kotlin, Ruby.
+        \end{onecolentry}
+
+        \vspace{0.2 cm}
+
+        \begin{onecolentry}
+            \textbf{Technologies:} XCode, Gradle, Expo (React Native), Api Platform (PHP), Fastlane.
+        \end{onecolentry}
+
+\end{document}
